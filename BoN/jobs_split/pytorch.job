@@ -1,0 +1,51 @@
+#!/bin/sh
+
+# ------------------------------------------------------------------------------
+# Slurm directives
+# -----------------------------------------------------------------------------
+
+#SBATCH --partition=
+#SBATCH --qos=short
+#SBATCH --time=04:00:00
+#SBATCH --output=slurm.out
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=20000
+#SBATCH --gres=
+
+# ------------------------------------------------------------------------------
+# Printing some information
+# -----------------------------------------------------------------------------
+
+/usr/bin/scontrol show job -d "$SLURM_JOB_ID"
+
+# ------------------------------------------------------------------------------
+# Setting up the environment
+# ------------------------------------------------------------------------------
+
+echo "----------------- Environment ------------------"
+<Load your ENV here>
+
+conda activate YOUR_ENV
+
+export PYTHONDONTWRITEBYTECODE=abc
+export PYTHONUNBUFFERED=TRUE
+
+# ------------------------------------------------------------------------------
+# And finally running the code
+# ------------------------------------------------------------------------------
+
+echo "--------------- Running the code ---------------"
+
+echo -n "This run started on: "
+date
+
+python -c "import torch; print(torch.cuda.device_count())"
+nvidia-smi
+
+cd ../../src_sd
+
+python inference_split.py --config ../configs_split/method/config_file.yaml
+
+echo -n "This run completed on: "
+date

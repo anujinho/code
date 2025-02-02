@@ -1,0 +1,21 @@
+project:
+  seed: 2024
+  name: ibon100i2i_face_r1
+  path: ../outputs
+  promptspath: ../assets/face.txt
+  accelerator: auto
+
+guidance:
+  basemodel: runwayml/stable-diffusion-v1-5
+  method: ibon_i2i
+  scorer: facedetector
+  genbatch: 1
+  block_size: 10
+  num_samples: 1
+  num_images_per_prompt: 50
+  num_inference_steps: 500
+  percent_noise: 1.0
+  guidance_scale: 5.0
+  num_gen_target_images_per_prompt: 40
+  target_idxs: [0]
+  prompt_idxs: [0]
